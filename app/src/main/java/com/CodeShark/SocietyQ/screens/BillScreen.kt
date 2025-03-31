@@ -1,8 +1,7 @@
-package com.cryptic.rwa.screens
+package com.CodeShark.SocietyQ.screens
 
 import BillViewModel
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
@@ -12,7 +11,6 @@ import androidx.compose.material.icons.filled.CheckCircle // Paid status
 import androidx.compose.material.icons.filled.Download // Download receipt
 import androidx.compose.material.icons.filled.Error // Unpaid status
 import androidx.compose.material.icons.filled.Payment // Pay bill
-import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.CurrencyRupee
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Button
@@ -30,10 +28,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.cryptic.rwa.sampleData.BillData
-import com.cryptic.rwa.sampleData.ListItemAction
-import com.cryptic.rwa.sampleData.formatDate
-import com.cryptic.rwa.sampleData.formatMonthYear
+import com.CodeShark.SocietyQ.sampleData.BillData
+import com.CodeShark.SocietyQ.sampleData.ListItemAction
+import com.CodeShark.SocietyQ.sampleData.formatDate
+import com.CodeShark.SocietyQ.sampleData.formatMonthYear
 import java.time.LocalDate
 import java.util.Locale
 

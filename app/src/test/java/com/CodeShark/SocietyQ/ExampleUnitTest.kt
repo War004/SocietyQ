@@ -1,4 +1,4 @@
-package com.cryptic.rwa
+package com.CodeShark.SocietyQ
 
 import org.junit.Test
 

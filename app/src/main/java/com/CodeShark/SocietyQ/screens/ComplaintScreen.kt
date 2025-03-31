@@ -1,4 +1,4 @@
-package com.cryptic.rwa.screens
+package com.CodeShark.SocietyQ.screens
 
 import android.Manifest
 import android.net.Uri
@@ -29,8 +29,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.cryptic.rwa.viewModel.ComplaintType
-import com.cryptic.rwa.viewModel.ComplaintViewModel
+import com.CodeShark.SocietyQ.viewModel.ComplaintType
+import com.CodeShark.SocietyQ.viewModel.ComplaintViewModel
 import com.google.accompanist.permissions.*
 import android.os.Build
 

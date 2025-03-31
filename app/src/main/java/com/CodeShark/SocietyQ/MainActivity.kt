@@ -1,4 +1,4 @@
-package com.cryptic.rwa
+package com.CodeShark.SocietyQ
 
 import android.content.Context
 import android.os.Bundle
@@ -18,13 +18,17 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.filled.* // Keep existing filled icons
 import androidx.compose.material.icons.outlined.* // Keep existing outlined icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,32 +41,71 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cryptic.rwa.screens.ComplaintScreen
-// --- Import the new BillScreen ---
-import com.cryptic.rwa.screens.BillsScreen
-import com.cryptic.rwa.ui.theme.RwaTheme
+import com.CodeShark.SocietyQ.data.UserPreferences // Import UserPreferences
+import com.CodeShark.SocietyQ.screens.ComplaintScreen
+import com.CodeShark.SocietyQ.screens.BillsScreen
+import com.CodeShark.SocietyQ.screens.LoginScreen // Import LoginScreen
+import com.CodeShark.SocietyQ.ui.theme.RwaTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Determine the start destination based on login status
+        val startDestination = if (UserPreferences.isLoggedIn(this)) {
+            AppDestinations.DASHBOARD
+        } else {
+            AppDestinations.LOGIN
+        }
+
         setContent {
-            RwaApp() // Call the main app composable
+            RwaApp(startDestination = startDestination) // Pass start destination
         }
     }
 }
 
-// --- RwaApp NavHost remains the same ---
+// --- RwaApp NavHost ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RwaApp() {
+fun RwaApp(startDestination: String) { // Accept start destination
     RwaTheme {
         val navController = rememberNavController()
 
         NavHost(
             navController = navController,
-            startDestination = AppDestinations.DASHBOARD
+            startDestination = startDestination,
+
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(500, easing = LinearOutSlowInEasing)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(500, easing = LinearOutSlowInEasing)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(500, easing = LinearOutSlowInEasing)
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(500, easing = LinearOutSlowInEasing)
+                )
+            }
+
         ) {
+            // --- Add Login Screen Route ---
+            composable(AppDestinations.LOGIN) {
+                LoginScreen(navController = navController)
+            }
             composable(AppDestinations.DASHBOARD) {
                 RwaScreenUI(navController = navController)
             }
@@ -82,32 +125,14 @@ fun RwaApp() {
                 EventScreen(navController = navController)
             }
             composable(AppDestinations.COMPLAINT_FORM) {
-                ComplaintScreen()
+                ComplaintScreen() // Assuming this doesn't need navController directly for now
             }
-            //composable(AppDestinations.INFO_QR) {
+            //composable(AppDestinations.INFO_QR) { // Keep commented if not fully implemented
             //    InfoQrScreen(navController = navController)
             //}
             // Add composable blocks for other destinations as needed
-            // Example for Maintenance (if you create the screen later)
-            // composable(AppDestinations.MAINTENANCE_LIST) {
-            //     MaintenanceScreen(navController = navController)
-            // }
-            // Example for Lost & Found (if you create the screen later)
-            // composable(AppDestinations.LOST_FOUND_LIST) {
-            //     LostFoundScreen(navController = navController)
-            // }
         }
     }
-}
-
-
-// --- Greeting, EssentialItem remain the same ---
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
 
 data class EssentialItem(
@@ -119,8 +144,10 @@ data class EssentialItem(
 @Composable
 fun RwaScreenUI(navController: NavController) {
 
-    // Get context for the Toast message
+    // Get context for the Toast message and UserPreferences
     val context = LocalContext.current
+    // No longer need to get username for the title
+    // var username by remember { mutableStateOf(UserPreferences.getLoggedInUsername(context) ?: "Guest") }
 
     val essentialItems = listOf(
         EssentialItem(Icons.Outlined.Description, "Notice"),
@@ -135,15 +162,16 @@ fun RwaScreenUI(navController: NavController) {
     )
 
     Scaffold(
-        // --- TopAppBar remains the same ---
+        // --- TopAppBar ---
         topBar = {
             TopAppBar(
-                title = {/*nothing*/},
+                // --- Updated Title ---
+                title = { Text("SocietyQ") }, // Static App Title
+                // --- End Updated Title ---
                 navigationIcon = {
                     IconButton(onClick = {/*TODO*/}){
                         Icon(
-                            //insert the actual logo here
-                            imageVector = Icons.Default.Image,
+                            imageVector = Icons.Default.Apartment, // Changed icon
                             contentDescription = "App Logo",
                             modifier = Modifier.size(32.dp)
                         )
@@ -156,10 +184,18 @@ fun RwaScreenUI(navController: NavController) {
                             contentDescription = "Search"
                         )
                     }
-                    IconButton(onClick = {/*TODO* handle account click */ }){
+                    // --- Logout Button ---
+                    IconButton(onClick = {
+                        UserPreferences.logout(context)
+                        // Navigate back to login screen, clearing the stack
+                        navController.navigate(AppDestinations.LOGIN) {
+                            popUpTo(AppDestinations.DASHBOARD) { inclusive = true }
+                            launchSingleTop = true // Avoid multiple login screens if clicked fast
+                        }
+                    }){
                         Icon(
-                            imageVector = Icons.Default.AccountCircle,
-                            contentDescription = "Account",
+                            imageVector = Icons.AutoMirrored.Filled.Logout, // Logout icon
+                            contentDescription = "Logout",
                         )
                     }
                 },
@@ -284,7 +320,7 @@ fun ImportantCard(modifier: Modifier = Modifier) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "A",
+                    text = "A", // TODO: Make this dynamic if needed
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer // Adjust color
                 )
@@ -300,7 +336,7 @@ fun ImportantCard(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Parcle with Guard",
+                    text = "Parcel with Guard", // TODO: Make dynamic
                     style = MaterialTheme.typography.bodySmall,
                     color = LocalContentColor.current.copy(alpha = 0.7f) // Slightly muted
                 )
@@ -364,9 +400,10 @@ fun EssentialGridItem(
 }
 
 
-// --- AppDestinations object remains the same ---
-// (Ensure it includes all necessary routes, including INFO_QR)
+// --- AppDestinations object ---
+// (Ensure it includes LOGIN)
 object AppDestinations {
+    const val LOGIN = "login" // Added Login route
     const val DASHBOARD = "dashboard"
     const val NOTICE_LIST = "notice_list"
     const val PERSONAL_NOTICE_LIST = "personal_notice_list"

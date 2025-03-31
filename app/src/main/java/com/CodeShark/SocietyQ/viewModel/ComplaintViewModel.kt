@@ -1,4 +1,4 @@
-package com.cryptic.rwa.viewModel
+package com.CodeShark.SocietyQ.viewModel
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel

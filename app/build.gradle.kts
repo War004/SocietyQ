@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.cryptic.rwa"
+    namespace = "com.CodeShark.SocietyQ"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.cryptic.rwa"
+        applicationId = "com.CodeShark.SocietyQ"
         minSdk = 31
         targetSdk = 35
         versionCode = 1

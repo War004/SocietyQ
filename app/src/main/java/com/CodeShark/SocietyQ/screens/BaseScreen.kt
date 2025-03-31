@@ -1,4 +1,4 @@
-package com.cryptic.rwa.screens
+package com.CodeShark.SocietyQ.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -31,12 +31,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.cryptic.rwa.sampleData.DeliveryData
-import com.cryptic.rwa.sampleData.EventData
-import com.cryptic.rwa.sampleData.ListItemAction
-import com.cryptic.rwa.sampleData.NoticeData
-import com.cryptic.rwa.viewModel.ListViewModel
-import com.cryptic.rwa.sampleData.formatDate
+import com.CodeShark.SocietyQ.sampleData.DeliveryData
+import com.CodeShark.SocietyQ.sampleData.EventData
+import com.CodeShark.SocietyQ.sampleData.ListItemAction
+import com.CodeShark.SocietyQ.sampleData.NoticeData
+import com.CodeShark.SocietyQ.viewModel.ListViewModel
+import com.CodeShark.SocietyQ.sampleData.formatDate
 import androidx.compose.ui.text.TextStyle
 
 // --- Helper composable for Icon + Text pairs (Make sure this is available) ---

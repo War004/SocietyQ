@@ -1,11 +1,11 @@
-package com.cryptic.rwa.viewModel
+package com.CodeShark.SocietyQ.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cryptic.rwa.sampleData.DeliveryData
-import com.cryptic.rwa.sampleData.EventData
-import com.cryptic.rwa.sampleData.ListItemAction
-import com.cryptic.rwa.sampleData.NoticeData
+import com.CodeShark.SocietyQ.sampleData.DeliveryData
+import com.CodeShark.SocietyQ.sampleData.EventData
+import com.CodeShark.SocietyQ.sampleData.ListItemAction
+import com.CodeShark.SocietyQ.sampleData.NoticeData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

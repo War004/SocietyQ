@@ -1,4 +1,4 @@
-package com.cryptic.rwa.ui.theme
+package com.CodeShark.SocietyQ.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
