@@ -87,3 +87,5 @@ There are two ways to install the app:
 * **Riteshwar Poddar:** App development
 * **Rajan Kumar Jha:** Backend, database
 * **Suryanash Kumar Singh:** Frontend
+
+Please note: The prototype is for the mobile app for normal user. This application is made for the hackthon conducted by CodeForge'25. The app displays the visual aspect and the overall user experience for the logged in state.
