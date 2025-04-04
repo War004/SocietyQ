@@ -5,6 +5,7 @@
     <!-- For Android 13+ (API level 33 and above) -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- For devices below API level 33 -->
     <uses-permission

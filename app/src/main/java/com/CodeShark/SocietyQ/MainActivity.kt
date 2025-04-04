@@ -44,7 +44,9 @@ import androidx.navigation.compose.rememberNavController
 import com.CodeShark.SocietyQ.data.UserPreferences // Import UserPreferences
 import com.CodeShark.SocietyQ.screens.ComplaintScreen
 import com.CodeShark.SocietyQ.screens.BillsScreen
+import com.CodeShark.SocietyQ.screens.InfoQrScreen // <<<--- ADD IMPORT for InfoQrScreen
 import com.CodeShark.SocietyQ.screens.LoginScreen // Import LoginScreen
+import com.CodeShark.SocietyQ.screens.LostFoundScreen
 import com.CodeShark.SocietyQ.ui.theme.RwaTheme
 
 class MainActivity : ComponentActivity() {
@@ -109,27 +111,37 @@ fun RwaApp(startDestination: String) { // Accept start destination
             composable(AppDestinations.DASHBOARD) {
                 RwaScreenUI(navController = navController)
             }
+
+            // --- Restore Actual Screen Calls ---
             composable(AppDestinations.NOTICE_LIST) {
-                NoticeScreen(navController = navController)
+                // Call the actual NoticeScreen composable
+                NoticeScreen(navController = navController) // <<<--- FIXED
             }
             composable(AppDestinations.PERSONAL_NOTICE_LIST) {
-                PersonalNoticeScreen(navController = navController)
+                // Call the actual PersonalNoticeScreen composable
+                PersonalNoticeScreen(navController = navController) // <<<--- FIXED
             }
             composable(AppDestinations.DELIVERY_LIST) {
-                DeliveryScreen(navController = navController)
+                // Call the actual DeliveryScreen composable
+                DeliveryScreen(navController = navController) // <<<--- FIXED
             }
             composable(AppDestinations.BILL_LIST) {
-                BillsScreen(navController = navController)
+                BillsScreen(navController = navController) // Was already correct
             }
             composable(AppDestinations.EVENT_LIST) {
-                EventScreen(navController = navController)
+                // Call the actual EventScreen composable
+                EventScreen(navController = navController) // <<<--- FIXED
             }
             composable(AppDestinations.COMPLAINT_FORM) {
-                ComplaintScreen() // Assuming this doesn't need navController directly for now
+                ComplaintScreen() // Was already correct
             }
-            //composable(AppDestinations.INFO_QR) { // Keep commented if not fully implemented
-            //    InfoQrScreen(navController = navController)
-            //}
+            composable(AppDestinations.INFO_QR) {
+                InfoQrScreen(navController = navController) // Was already correct
+            }
+            composable(AppDestinations.LOST_FOUND_LIST) {
+                LostFoundScreen(navController = navController) // Was already correct
+            }
+
             // Add composable blocks for other destinations as needed
         }
     }
@@ -144,11 +156,8 @@ data class EssentialItem(
 @Composable
 fun RwaScreenUI(navController: NavController) {
 
-    // Get context for the Toast message and UserPreferences
     val context = LocalContext.current
-    // No longer need to get username for the title
-    // var username by remember { mutableStateOf(UserPreferences.getLoggedInUsername(context) ?: "Guest") }
-
+    // Essential items list remains the same
     val essentialItems = listOf(
         EssentialItem(Icons.Outlined.Description, "Notice"),
         EssentialItem(Icons.Outlined.EditNote, "Complaint"),
@@ -158,20 +167,18 @@ fun RwaScreenUI(navController: NavController) {
         EssentialItem(Icons.Outlined.Build, "Maintenance"), // Target for Toast
         EssentialItem(Icons.Outlined.StarOutline, "Events"),
         EssentialItem(Icons.Outlined.QrCode,"Info QR"),
-        EssentialItem(Icons.Outlined.ShoppingBag, "Lost & Found") // Target for Toast
+        EssentialItem(Icons.Outlined.ShoppingBag, "Lost & Found") // <<<--- THIS ITEM
     )
 
     Scaffold(
-        // --- TopAppBar ---
+        // TopAppBar remains the same
         topBar = {
             TopAppBar(
-                // --- Updated Title ---
-                title = { Text("SocietyQ") }, // Static App Title
-                // --- End Updated Title ---
+                title = { Text("SocietyQ") },
                 navigationIcon = {
                     IconButton(onClick = {/*TODO*/}){
                         Icon(
-                            imageVector = Icons.Default.Apartment, // Changed icon
+                            imageVector = Icons.Default.Apartment,
                             contentDescription = "App Logo",
                             modifier = Modifier.size(32.dp)
                         )
@@ -184,17 +191,15 @@ fun RwaScreenUI(navController: NavController) {
                             contentDescription = "Search"
                         )
                     }
-                    // --- Logout Button ---
                     IconButton(onClick = {
                         UserPreferences.logout(context)
-                        // Navigate back to login screen, clearing the stack
                         navController.navigate(AppDestinations.LOGIN) {
                             popUpTo(AppDestinations.DASHBOARD) { inclusive = true }
-                            launchSingleTop = true // Avoid multiple login screens if clicked fast
+                            launchSingleTop = true
                         }
                     }){
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.Logout, // Logout icon
+                            imageVector = Icons.AutoMirrored.Filled.Logout,
                             contentDescription = "Logout",
                         )
                     }
@@ -211,27 +216,27 @@ fun RwaScreenUI(navController: NavController) {
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-            // --- ImportantCard, Filter Chips, Title remain the same ---
+            // ImportantCard, Filter Chips, Title remain the same
             Spacer(modifier = Modifier.height(16.dp))
-            ImportantCard() // Remains the same
+            ImportantCard()
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp) // Spacing between chips
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 AssistChip(
-                    onClick = {showUnderConstructionToast(context) /* TODO: Handle Show All Click */ },
+                    onClick = {showUnderConstructionToast(context) },
                     label = { Text("Show all") },
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.List, // Or Menu icon
+                            imageVector = Icons.AutoMirrored.Outlined.List,
                             contentDescription = "Show all filter"
                         )
                     }
                 )
                 Spacer(Modifier.weight(1f))
                 AssistChip(
-                    onClick = { showUnderConstructionToast(context) /* TODO: Handle History Click */ },
+                    onClick = { showUnderConstructionToast(context) },
                     label = { Text("History") },
                     leadingIcon = {
                         Icon(
@@ -241,16 +246,14 @@ fun RwaScreenUI(navController: NavController) {
                     }
                 )
             }
-
             Spacer(modifier = Modifier.height(24.dp))
-            // --- Daily Essentials Title ---
             Text(
                 text = "Daily Essentials",
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-
             Spacer(modifier = Modifier.height(8.dp))
+
 
             // --- Essentials Grid ---
             LazyVerticalGrid(
@@ -272,18 +275,19 @@ fun RwaScreenUI(navController: NavController) {
                                 "Delivery" -> navController.navigate(AppDestinations.DELIVERY_LIST)
                                 "Bills" -> navController.navigate(AppDestinations.BILL_LIST)
                                 "Events" -> navController.navigate(AppDestinations.EVENT_LIST)
-                                //"Info QR" -> navController.navigate(AppDestinations.INFO_QR)
+                                "Info QR" -> navController.navigate(AppDestinations.INFO_QR)
+
+                                // --- UPDATE Navigation for Lost & Found ---
+                                "Lost & Found" -> navController.navigate(AppDestinations.LOST_FOUND_LIST) // <<<--- NAVIGATE HERE
 
                                 // --- Use Toast for unimplemented items ---
-                                "Info QR" ->showUnderConstructionToast(context)
                                 "Maintenance" -> showUnderConstructionToast(context)
-                                "Lost & Found" -> showUnderConstructionToast(context)
-                                // --- END Toast Usage ---
+                                // Remove Lost & Found from toast items
 
                                 else -> {
                                     // Fallback for any other unexpected items
                                     println("Navigation not implemented for: ${item.label}")
-                                    showUnderConstructionToast(context) // Show toast for any other unimplemented ones too
+                                    showUnderConstructionToast(context)
                                 }
                             }
                         }
@@ -403,7 +407,7 @@ fun EssentialGridItem(
 // --- AppDestinations object ---
 // (Ensure it includes LOGIN)
 object AppDestinations {
-    const val LOGIN = "login" // Added Login route
+    const val LOGIN = "login"
     const val DASHBOARD = "dashboard"
     const val NOTICE_LIST = "notice_list"
     const val PERSONAL_NOTICE_LIST = "personal_notice_list"
@@ -412,9 +416,9 @@ object AppDestinations {
     const val EVENT_LIST = "event_list"
     const val COMPLAINT_FORM = "complaint_form"
     const val INFO_QR = "info_qr"
+    const val LOST_FOUND_LIST = "lost_found_list" // <<<--- ADD THIS ROUTE
     // Add routes for other items if they get screens
     // const val MAINTENANCE_LIST = "maintenance_list"
-    // const val LOST_FOUND_LIST = "lost_found_list"
 }
 
 

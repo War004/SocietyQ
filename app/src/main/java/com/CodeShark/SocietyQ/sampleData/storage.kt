@@ -31,6 +31,39 @@ data class BillData(
     val paymentDate: LocalDate? = null // Optional: Track when it was paid
 )
 
+// --- NEW: Lost and Found Data Structures ---
+
+/**
+ * Enum to represent the status of a Lost and Found item.
+ */
+enum class LostFoundStatus {
+    LOST, FOUND
+}
+
+/**
+ * Represents a single item reported as lost or found.
+ *
+ * @param id Unique identifier for the item.
+ * @param name The name or title of the item (e.g., "Black Wallet").
+ * @param description Optional detailed description.
+ * @param imageUrl Optional URL string for the item's image. Use placeholder URLs for sample data.
+ * @param status Whether the item is [LOST] or [FOUND].
+ * @param dateReported The date the item was reported.
+ * @param location A description of where the item was lost or found.
+ * @param contactInfo Instructions on who to contact (e.g., "Contact Security Desk").
+ */
+data class LostFoundItemData(
+    val id: String,
+    val name: String,
+    val description: String?,
+    val imageUrl: String?,
+    val status: LostFoundStatus,
+    val dateReported: LocalDate,
+    val location: String,
+    val contactInfo: String = "Contact Security Desk" // Default contact info
+)
+
+
 fun formatDate(date: LocalDate): String {
     return date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
 }

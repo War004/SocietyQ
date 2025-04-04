@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+    //qr code
+    implementation(libs.zxing.core)
+
     // Core & UI
     implementation(libs.coil.compose.v250)
 
